@@ -1,0 +1,5 @@
+#!/bin/sh
+mount -a
+mdev -s
+
+# /sbin/udhcpc -b -i eth0 &

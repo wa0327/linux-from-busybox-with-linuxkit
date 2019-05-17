@@ -1,0 +1,5 @@
+#!/bin/sh
+echo '=== build busybox ==='
+docker run --rm -v `pwd`:/mac gcc sh /mac/scripts/1-build
+echo '=== construct initial ram disk ==='
+docker run --rm -v `pwd`:/mac busybox sh /mac/scripts/2-pack

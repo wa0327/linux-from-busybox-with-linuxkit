@@ -1,0 +1,7 @@
+#!/bin/sh
+cd /root
+tar xf /mac/rootfs.tar.gz
+mv linuxrc init
+cp -r /mac/rootfs/* .
+find . | cpio -oH newc | gzip -c  > /initrd.gz
+mv /initrd.gz /mac/

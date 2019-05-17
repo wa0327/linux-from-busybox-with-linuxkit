@@ -1,0 +1,4 @@
+::sysinit:/etc/init.d/rcS
+# ttyS0::respawn:/sbin/getty -nl /sbin/autologin 38400 ttyS0 xterm-256color
+ttyS0::respawn:/sbin/getty 38400 ttyS0 xterm-256color
+::ctrlaltdel:/sbin/reboot

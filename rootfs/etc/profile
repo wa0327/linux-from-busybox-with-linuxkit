@@ -1,0 +1,8 @@
+alias ls='ls -p'
+alias l='ls'
+alias ll='ls -lh'
+alias la='ls -A'
+alias lla='ls -lhA'
+
+export PS1='[\h] \w \$ '
+export PATH='/usr/bin:/bin:/usr/sbin:/sbin'
