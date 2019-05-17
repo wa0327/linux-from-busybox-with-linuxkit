@@ -1,0 +1,2 @@
+#!/bin/sh
+docker run --rm -v `pwd`:/mac busybox sh /mac/scripts/2-pack
