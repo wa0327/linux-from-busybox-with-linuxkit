@@ -11,9 +11,9 @@ args=(
   -l com1,stdio
   -s 0,hostbridge
   -s 31,lpc
-  -s 2,virtio-net
+  -s 1,virtio-net
+  -s 2,ahci-hd,system.part
   -s 7,virtio-rnd
-  -s 4,ahci-hd,system.part
   -f kexec,$kernel,$initrd,"console=ttyS0 printk.time=1 loglevel=5"
 )
 exec sudo hyperkit2 "${args[@]}"
