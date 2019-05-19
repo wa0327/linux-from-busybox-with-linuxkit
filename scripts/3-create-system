@@ -7,13 +7,11 @@ dd if=/dev/zero of=/system.part bs=1M count=32 \
   && mkfs.ext4 /system.part 1>/dev/null \
   && mount /system.part /mnt \
   && {
-    cd /mnt
-    rmdir lost+found
-    tar xf /mac/busybox.tar.gz
-    cp -r /mac/system/* .
-    # cp -a /mac/kernel-stuff/$ver/modules lib/
-
-    cd /
-    umount /mnt \
-      && mv /system.part /mac/
+    cd /mnt \
+      && tar xf /mac/busybox.tar.gz \
+      && cp -r /mac/system/* . \
+      && cd / \
+      && umount /mnt \
+      && mv /system.part /mac/ \
+      && echo 'system partition created successfully.'
   }
