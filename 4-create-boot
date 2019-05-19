@@ -1,0 +1,7 @@
+#!/bin/sh
+cd $(dirname $0)
+docker run --rm \
+    -v `pwd`:/mac \
+    -v ~/vm/hyperkit/UEFI/bootfs:/uefi \
+    --privileged \
+    wa0327/archlinux sh /mac/scripts/$(basename $0)

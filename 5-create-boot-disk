@@ -1,0 +1,6 @@
+#!/bin/sh
+ssh root@archlinux rm /mac
+ssh root@archlinux ln -sf /mnt/psf/Home/vm/hyperkit/busybox /mac
+ssh root@archlinux rm /EFI
+ssh root@archlinux ln -sf /mnt/psf/Home/vm/hyperkit/UEFI/bootfs/EFI /EFI
+ssh root@archlinux sh /mac/scripts/$(basename $0)

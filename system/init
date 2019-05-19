@@ -1,4 +1,6 @@
 #!/bin/sh
 echo !!! [system]$0 executed !!!
+echo "args: $@"
+env
 exec /sbin/init
 # exec /sbin/getty -nl /sbin/autologin 38400 ttyS0 xterm-256color

@@ -4,7 +4,7 @@ ver=`cat /mac/KERNEL_VERSION`
 umount /mnt 2> /dev/null
 
 dd if=/dev/zero of=/system.part bs=1M count=32 \
-  && mkfs.ext4 /system.part \
+  && mkfs.ext4 /system.part 1>/dev/null \
   && mount /system.part /mnt \
   && {
     cd /mnt

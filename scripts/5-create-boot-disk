@@ -1,0 +1,32 @@
+#!/bin/sh
+ver=`cat /mac/KERNEL_VERSION`
+
+mkdir -p /tmp/boot
+umount /tmp/boot 2>/dev/null
+
+dd if=/dev/zero of=/tmp/boot.disk bs=1M count=48 \
+  && parted -s /tmp/boot.disk mktable gpt \
+  && parted -s /tmp/boot.disk mkpart fat32 1 100% \
+  && kpartx -av /tmp/boot.disk \
+  && mkfs.fat -F32 /dev/mapper/loop0p1 1>/dev/null \
+  && mount /dev/mapper/loop0p1 /tmp/boot \
+  && {
+    cd /tmp/boot
+    mkdir -p EFI/BOOT
+    cp /EFI/BOOT/BOOTX64.EFI EFI/BOOT/
+    cp /mac/kernel-stuff/$ver/vmlinuz .
+    cp /mac/initrd.gz .
+    cat > EFI/BOOT/grub.cfg << EOF
+set timeout=0
+set gfxpayload=text
+menuentry 'LinuxKit' {
+  linuxefi /vmlinuz earlyprintk=serial console=ttyS0
+  initrdefi /initrd.gz
+}
+EOF
+
+    cd /
+    umount /tmp/boot \
+      && kpartx -dv /tmp/boot.disk \
+      && mv /tmp/boot.disk /mac/
+  }

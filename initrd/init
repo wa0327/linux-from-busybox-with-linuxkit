@@ -1,5 +1,7 @@
 #!/bin/sh
 echo !!! [initrd]$0 executed !!!
+echo "args: $@"
+env
 mount -a
 mdev -s
 mount /dev/sda /new_root 
