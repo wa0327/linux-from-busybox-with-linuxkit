@@ -1,0 +1,19 @@
+#!/bin/sh
+ver=`cat /mac/KERNEL_VERSION`
+
+umount /mnt 2> /dev/null
+
+dd if=/dev/zero of=/system.part bs=1M count=32 \
+  && mkfs.ext4 /system.part \
+  && mount /system.part /mnt \
+  && {
+    cd /mnt
+    rmdir lost+found
+    tar xf /mac/busybox.tar.gz
+    cp -r /mac/system/* .
+    # cp -a /mac/kernel-stuff/$ver/modules lib/
+
+    cd /
+    umount /mnt \
+      && mv /system.part /mac/
+  }

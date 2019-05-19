@@ -1,6 +1,6 @@
 #!/bin/sh
 cd $(dirname $0)
 ver=`cat KERNEL_VERSION`
-find rootfs -name .DS_Store -delete
+find system -name .DS_Store -delete
 find kernel-stuff/$ver/modules -name .DS_Store -delete
 docker run --rm -v `pwd`:/mac --privileged wa0327/archlinux sh /mac/scripts/$(basename $0)

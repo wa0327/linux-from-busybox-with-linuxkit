@@ -1,0 +1,8 @@
+#!/bin/sh
+echo !!! [initrd]$0 executed !!!
+mount -a
+mdev -s
+mount /dev/sda /new_root 
+echo !!! switch root to /dev/sda !!!
+exec env -i "TERM=$TERM" /sbin/switch_root /new_root /init
+# exec /sbin/getty 38400 ttyS0 xterm-256color

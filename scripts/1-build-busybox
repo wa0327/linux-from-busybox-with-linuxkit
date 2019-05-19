@@ -45,4 +45,5 @@ make install
 
 # package rootfs
 cd $ROOTFS
+rm linuxrc
 tar czf /mac/busybox.tar.gz .
