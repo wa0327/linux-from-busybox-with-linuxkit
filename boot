@@ -1,6 +1,5 @@
 #!/bin/sh
-DIR=$(dirname $0)
-cd $DIR
+cd $(dirname $0)
 
 kernel=vmlinuz
 initrd=initrd.gz
