@@ -1,18 +1,7 @@
 #!/bin/sh
 ver=`cat /mac/KERNEL_VERSION`
 
-umount /mnt 2> /dev/null
-
-dd if=/dev/zero of=/boot.part bs=1M count=48 \
-  && mkfs.fat -F32 /boot.part 1>/dev/null \
-  && mount /boot.part /mnt \
-  && {
-    cd /mnt
-    mkdir -p EFI/BOOT
-    cp /uefi/EFI/BOOT/BOOTX64.EFI EFI/BOOT/
-    cp /mac/kernel-stuff/$ver/vmlinuz .
-    cp /mac/initrd.gz .
-    cat > EFI/BOOT/grub.cfg << EOF
+cat > /grub.cfg << EOF
 set timeout=0
 set gfxpayload=text
 menuentry 'LinuxKit' {
@@ -21,7 +10,17 @@ menuentry 'LinuxKit' {
 }
 EOF
 
-    cd /
-    umount /mnt \
-      && mv /boot.part /mac/
+dd if=/dev/zero of=/boot.part bs=1M count=48 \
+  && mkfs.fat -F32 /boot.part 1>/dev/null \
+  && mount /boot.part /mnt \
+  && {
+    cd /mnt \
+      && cp -a /uefi/EFI . \
+      && cp /mac/kernel-stuff/$ver/vmlinuz . \
+      && cp /mac/initrd.gz . \
+      && cp /grub.cfg EFI/BOOT/ \
+      && cd / \
+      && umount /mnt \
+      && mv /boot.part /mac/ \
+      && echo 'boot partition created successfully.'
   }
