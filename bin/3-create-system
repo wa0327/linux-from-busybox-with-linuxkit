@@ -1,5 +1,5 @@
 #!/bin/sh
-cd $(dirname $0)
+cd $(dirname $0)/..
 ver=`cat KERNEL_VERSION`
 find system -name .DS_Store -delete
 find kernel-stuff/$ver/modules -name .DS_Store -delete
