@@ -5,5 +5,20 @@ cd /root
 tar xf /mac/busybox.tar.gz
 cp -r /mac/rootfs/* .
 # cp -a /mac/kernel-stuff/$ver/modules lib/
+
+rm init linuxrc
+cat > init << eof
+#!/bin/sh
+echo !!! [initrd] /init executed !!!
+mount -a
+mdev -s
+mkdir /new_root
+mount /dev/sda /new_root 
+echo ':: switch root to /dev/sda ::'
+exec env -i "TERM=$TERM" /sbin/switch_root /new_root /linuxrc
+# exec /sbin/getty -nl /sbin/autologin 38400 ttyS0 xterm-256color
+eof
+chmod +x init
+
 find . | cpio -oH newc | gzip -c  > /initrd.gz
 mv /initrd.gz /mac/
