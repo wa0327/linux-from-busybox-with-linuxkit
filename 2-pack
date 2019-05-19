@@ -1,3 +1,4 @@
 #!/bin/sh
 cd $(dirname $0)
+find rootfs -name .DS_Store -delete
 docker run --rm -v `pwd`:/mac busybox sh /mac/scripts/2-pack

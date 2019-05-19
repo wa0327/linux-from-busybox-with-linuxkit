@@ -45,4 +45,4 @@ make install
 
 # package rootfs
 cd $ROOTFS
-tar czf /mac/rootfs.tar.gz .
+tar czf /mac/busybox.tar.gz .
