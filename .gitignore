@@ -1,5 +1,5 @@
 kernel-stuff/**/
 run-state
 src
-busybox.tar.gz
-initrd.gz
+*.gz
+*.part

@@ -9,10 +9,10 @@ args=(
   -c 2
   -m 1G
   -l com1,stdio
-  -s 0:0,hostbridge
+  -s 0,hostbridge
   -s 31,lpc
   -s 2,virtio-net
   -s 7,virtio-rnd
-  -f kexec,$kernel,$initrd,"earlyprintk=serial console=ttyS0 printk.time=1 loglevel=6"
+  -f kexec,$kernel,$initrd,"earlyprintk=serial console=ttyS0 printk.time=1 loglevel=5"
 )
-exec sudo xhyve "${args[@]}"
+exec sudo hyperkit2 "${args[@]}"

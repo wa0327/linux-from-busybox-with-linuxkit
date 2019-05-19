@@ -6,3 +6,5 @@ alias lla='ls -lhA'
 
 export PS1='[\h] \w \$ '
 export PATH='/usr/bin:/bin:/usr/sbin:/sbin'
+
+stty columns 150 rows 40

@@ -4,6 +4,6 @@ ver=`cat /mac/KERNEL_VERSION`
 cd /root
 tar xf /mac/busybox.tar.gz
 cp -r /mac/rootfs/* .
-cp -a /mac/kernel-stuff/$ver/modules lib/
+# cp -a /mac/kernel-stuff/$ver/modules lib/
 find . | cpio -oH newc | gzip -c  > /initrd.gz
 mv /initrd.gz /mac/
