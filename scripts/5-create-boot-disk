@@ -1,22 +1,7 @@
 #!/bin/sh
 ver=`cat /mac/KERNEL_VERSION`
 
-mkdir -p /tmp/boot
-umount /tmp/boot 2>/dev/null
-
-dd if=/dev/zero of=/tmp/boot.disk bs=1M count=48 \
-  && parted -s /tmp/boot.disk mktable gpt \
-  && parted -s /tmp/boot.disk mkpart fat32 1 100% \
-  && kpartx -av /tmp/boot.disk \
-  && mkfs.fat -F32 /dev/mapper/loop0p1 1>/dev/null \
-  && mount /dev/mapper/loop0p1 /tmp/boot \
-  && {
-    cd /tmp/boot
-    mkdir -p EFI/BOOT
-    cp /EFI/BOOT/BOOTX64.EFI EFI/BOOT/
-    cp /mac/kernel-stuff/$ver/vmlinuz .
-    cp /mac/initrd.gz .
-    cat > EFI/BOOT/grub.cfg << EOF
+cat > /grub.cfg << EOF
 set timeout=0
 set gfxpayload=text
 menuentry 'LinuxKit' {
@@ -25,8 +10,29 @@ menuentry 'LinuxKit' {
 }
 EOF
 
-    cd /
-    umount /tmp/boot \
-      && kpartx -dv /tmp/boot.disk \
-      && mv /tmp/boot.disk /mac/
+losetup -D
+dd if=/dev/zero of=/boot.disk bs=1M count=48 1>/dev/null \
+  && parted -s /boot.disk mktable msdos \
+  && parted -s /boot.disk mkpart primary 1s 98303s \
+  && losetup -f /boot.disk \
+  && {
+    partx -d --nr 1 /dev/loop0
+    partx -a --sector-size 512 /dev/loop0 &&
+      mkfs.fat -F32 /dev/loop0p1 \
+        && mount /dev/loop0p1 /mnt \
+        && {
+          cd /mnt \
+            && cp -a /uefi/EFI . \
+            && cp /mac/kernel-stuff/$ver/vmlinuz . \
+            && cp /mac/initrd.gz . \
+            && cp /grub.cfg EFI/BOOT/ \
+            && cd / \
+            && umount /mnt \
+            && succeed=true
+        }
+
+      losetup -d /dev/loop0 \
+        && $succeed \
+        && mv /boot.disk /mac/ \
+        && echo 'boot disk created successfully.'
   }

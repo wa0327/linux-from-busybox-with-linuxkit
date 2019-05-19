@@ -1,6 +1,8 @@
 #!/bin/sh
-ssh root@archlinux rm /mac
-ssh root@archlinux ln -sf /mnt/psf/Home/vm/hyperkit/busybox /mac
-ssh root@archlinux rm /EFI
-ssh root@archlinux ln -sf /mnt/psf/Home/vm/hyperkit/UEFI/bootfs/EFI /EFI
-ssh root@archlinux sh /mac/scripts/$(basename $0)
+cd $(dirname $0)/..
+docker run --rm \
+    -v `pwd`:/mac \
+    -v ~/vm/hyperkit/UEFI/bootfs:/uefi \
+    -v /dev:/dev \
+    --privileged \
+    wa0327/archlinux sh /mac/scripts/$(basename $0)

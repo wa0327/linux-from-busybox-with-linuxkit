@@ -3,3 +3,4 @@ run-state
 src
 *.gz
 *.part
+*.disk
