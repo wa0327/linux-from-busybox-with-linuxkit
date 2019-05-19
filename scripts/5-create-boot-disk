@@ -14,6 +14,7 @@ losetup -D
 dd if=/dev/zero of=/boot.disk bs=1M count=48 1>/dev/null \
   && parted -s /boot.disk mktable gpt \
   && parted -s /boot.disk mkpart fat32 34s 98270s \
+  && parted -s /boot.disk name 1 BOOT \
   && losetup -f /boot.disk \
   && {
     partx -d --nr 1 /dev/loop0

@@ -11,7 +11,7 @@ menuentry 'LinuxKit' {
 EOF
 
 dd if=/dev/zero of=/boot.part bs=1M count=48 \
-  && mkfs.fat -F32 /boot.part 1>/dev/null \
+  && mkfs.fat -F32 -n BOOT /boot.part 1>/dev/null \
   && mount /boot.part /mnt \
   && {
     cd /mnt \
