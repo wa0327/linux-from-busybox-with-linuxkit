@@ -18,6 +18,6 @@ args=(
   -s 3,ahci-hd,boot.part
   -s 7,virtio-rnd
   # -f kexec,$kernel,$initrd,"console=ttyS0 printk.time=1 loglevel=5"
-  -f bootrom,../UEFI/UEFI.fd
+  -f bootrom,../UEFI/UEFI.fd #有 kernel 版本限制，目前測過的: 4.9.x
 )
 exec sudo hyperkit2 "${args[@]}"
