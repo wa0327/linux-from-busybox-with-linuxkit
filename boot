@@ -1,7 +1,8 @@
 #!/bin/sh
 cd $(dirname $0)
 
-kernel=vmlinuz
+version=`cat KERNEL_VERSION`
+kernel="kernel-stuff/$version/vmlinuz"
 initrd=initrd.gz
 args=(
   -A -u -U 7523f2ed-406e-49f0-9fcb-6bd7893db409
@@ -10,6 +11,8 @@ args=(
   -l com1,stdio
   -s 0:0,hostbridge
   -s 31,lpc
-  -f kexec,$kernel,$initrd,"earlyprintk=serial console=ttyS0 printk.time=1"
+  -s 2,virtio-net
+  -s 7,virtio-rnd
+  -f kexec,$kernel,$initrd,"earlyprintk=serial console=ttyS0 printk.time=1 loglevel=6"
 )
-exec sudo ../xhyve "${args[@]}"
+exec sudo xhyve "${args[@]}"

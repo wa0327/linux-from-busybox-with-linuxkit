@@ -1,3 +1,5 @@
-/*.gz
-/vmlinuz
-/src
+kernel-stuff/**/
+run-state
+src
+busybox.tar.gz
+initrd.gz

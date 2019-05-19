@@ -1,0 +1,27 @@
+#!/bin/sh
+cd $(dirname $0)
+default=`cat ../KERNEL_VERSION`
+ver=${1-"$default"}
+
+cat > kernel.yml << EOF
+kernel:
+  image: linuxkit/kernel:$ver
+  cmdline: "earlyprintk=serial console=ttyS0"
+EOF
+
+linuxkit build -format kernel+initrd kernel.yml \
+  && {
+    rm -rf initrd
+    rm -rf $ver
+    (mkdir initrd \
+      && cd initrd \
+      && zcat < ../kernel-initrd.img | cpio -id \
+      && mkdir ../$ver \
+      && mv lib/modules ../$ver/)
+    rm -rf initrd
+
+    mv kernel-kernel $ver/vmlinuz
+    rm kernel-{cmdline,initrd.img}
+  }
+
+rm kernel.yml
