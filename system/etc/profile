@@ -4,7 +4,7 @@ alias ll='ls -lh'
 alias la='ls -A'
 alias lla='ls -lhA'
 
-export PS1='[\h] \w \$ '
-export PATH='/usr/bin:/bin:/usr/sbin:/sbin'
+PS1='[\e[96m\h\e[0m][\e[1;97m$?\e[0m]\e[1;33m\w\e[0m \$ '
+PATH='/usr/bin:/bin:/usr/sbin:/sbin'
 
 stty columns 150 rows 40

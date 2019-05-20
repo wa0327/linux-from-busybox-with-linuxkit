@@ -1,32 +1,22 @@
 #!/bin/sh
 ver=`cat /mac/KERNEL_VERSION`
 
-cat > /grub.cfg << EOF
-set timeout=0
-set gfxpayload=text
-menuentry 'LinuxKit' {
-  linuxefi /vmlinuz earlyprintk=serial console=ttyS0
-  initrdefi /initrd.gz
-}
-EOF
-
 losetup -D
 dd if=/dev/zero of=/boot.disk bs=1M count=48 1>/dev/null \
   && parted -s /boot.disk mktable gpt \
-  && parted -s /boot.disk mkpart fat32 34s 98270s \
-  && parted -s /boot.disk name 1 BOOT \
+  && parted -s /boot.disk mkpart fat32 34s 98270s 1>/dev/null 2>&1 \
   && losetup -f /boot.disk \
   && {
     partx -d --nr 1 /dev/loop0
     partx -a --sector-size 512 /dev/loop0 &&
-      mkfs.fat -F32 /dev/loop0p1 \
+      mkfs.fat -F32 /dev/loop0p1 1>/dev/null \
         && mount /dev/loop0p1 /mnt \
         && {
           cd /mnt \
             && cp -a /uefi/EFI . \
             && cp /mac/kernel-stuff/$ver/vmlinuz . \
             && cp /mac/initrd.gz . \
-            && cp /grub.cfg EFI/BOOT/ \
+            && cp /mac/grub.cfg EFI/BOOT/ \
             && cd / \
             && umount /mnt \
             && succeed=true

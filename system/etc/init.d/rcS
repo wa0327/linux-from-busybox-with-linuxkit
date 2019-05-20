@@ -1,6 +1,21 @@
 #!/bin/sh
-mount -a
+mount -t sysfs sys /sys
+mount -t proc proc /proc
+mount -t devpts devpts /dev/pts
+mount -t tmpfs tmpfs /dev/shm
 mdev -s
-hostname `cat /etc/hostname`
-ip link set dev lo up
-ip link set dev eth0 up && udhcpc -i eth0 &
+mount -a
+hostname -F /etc/hostname
+syslogd -C1024 && echo -e '\e[1;32m系統記錄已啟用，可使用 logread 讀取。\e[0m'
+
+ifconfig lo 127.0.0.1 up
+route add 127.0.0.1 lo
+net_devices="$(awk -F: '/eth.:|tr.:/{print $1}' /proc/net/dev 2>/dev/null)"
+for device in $net_devices; do
+  ifconfig $device | grep -q 'inet addr' \
+    || {
+      echo -e "\e[1;32m網路設備 $device 已偵測到，透過 DHCP 取得網址。\e[0m"
+      udhcpc -i $device -x hostname:$(hostname) -S 2>&1
+    }
+done
+# ip link set dev eth0 up && udhcpc -i eth0 -S 2>/dev/null &

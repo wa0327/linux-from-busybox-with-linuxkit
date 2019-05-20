@@ -39,9 +39,7 @@ sed -i -e "s/.*CONFIG_CROSS_COMPILER_PREFIX=.*/CONFIG_CROSS_COMPILER_PREFIX=\"mu
        -e "s/.*CONFIG_STATIC=.*/CONFIG_STATIC=y/" \
        -e "s/.*CONFIG_PIE=.*/\# CONFIG_PIE is not set/" \
        .config
-make V=1 -j8 1>/dev/null 2>&1
-echo Installing busybox
-make install
+make V=1 -j8 install 1>/dev/null 2>&1
 
 # package rootfs
 cd $ROOTFS

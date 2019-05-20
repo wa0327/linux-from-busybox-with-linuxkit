@@ -1,15 +1,17 @@
 #!/bin/sh
 ver=`cat /mac/KERNEL_VERSION`
+exclude_modules=true
 
 umount /mnt 2> /dev/null
 
-dd if=/dev/zero of=/system.part bs=1M count=32 \
-  && mkfs.ext4 -L SYSTEM /system.part 1>/dev/null \
+dd if=/dev/zero of=/system.part bs=1M count=128 \
+  && mkfs.ext4 /system.part 1>/dev/null \
   && mount /system.part /mnt \
   && {
     cd /mnt \
       && tar xf /mac/busybox.tar.gz \
       && cp -r /mac/system/* . \
+      && ($exclude_modules || cp -a /mac/kernel-stuff/$ver/modules lib/) \
       && cd / \
       && umount /mnt \
       && mv /system.part /mac/ \

@@ -1,9 +1,9 @@
 #!/bin/sh
 ver=`cat /mac/KERNEL_VERSION`
 
-cd /root
-tar xf /mac/busybox.tar.gz
-cp -r /mac/initrd/* .
-# cp -a /mac/kernel-stuff/$ver/modules lib/
-find . | cpio -oH newc | gzip -c  > /initrd.gz
-mv /initrd.gz /mac/
+cd /root \
+  && tar xf /mac/busybox.tar.gz \
+  && cp -r /mac/initrd/* . \
+  && find . | cpio -oH newc | gzip -c  > /initrd.gz \
+  && mv /initrd.gz /mac/ \
+  && echo 'initrd created successfully.'
