@@ -12,6 +12,7 @@ dd if=/dev/zero of=/system.part bs=512 count=7500 2>/dev/null \
       && rmdir lost+found \
       && tar xf /mac/busybox.tar.gz \
       && cp -r /mac/system/* . \
+      && find . -name .gitkeep -delete
       && ($exclude_modules || cp -a /mac/kernel-stuff/$ver/modules lib/) \
       && cd / \
       && umount /mnt \
