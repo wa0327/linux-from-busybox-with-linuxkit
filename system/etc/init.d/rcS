@@ -6,6 +6,7 @@ mount -t tmpfs tmpfs /dev/shm
 mdev -s
 mount -a
 hostname -F /etc/hostname
+
 syslogd -C1024 && echo -e '\e[1;32mSystem logging enabled, use logread to read it.\e[0m'
 
 ifconfig lo 127.0.0.1 up
@@ -18,4 +19,3 @@ for device in $net_devices; do
       udhcpc -i $device -x hostname:$(hostname) -S 2>/dev/null &
     }
 done
-# ip link set dev eth0 up && udhcpc -i eth0 -S 2>/dev/null &
