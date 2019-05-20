@@ -1,8 +1,8 @@
 #!/bin/sh
 ver=`cat /mac/KERNEL_VERSION`
 
-dd if=/dev/zero of=/boot.part bs=1M count=48 \
-  && mkfs.fat -F32 /boot.part 1>/dev/null \
+dd if=/dev/zero of=/boot.part bs=512 count=16412 \
+  && mkfs.fat -F16 /boot.part \
   && mount /boot.part /mnt \
   && {
     cd /mnt \
