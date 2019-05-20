@@ -17,14 +17,15 @@ args=(
 )
 
 [[ $1 == 'uefi' ]] && {
+  #有 kernel 版本限制，目前測通過的有: 4.9.x。
   args+=(
     -s 1,virtio-vpnkit,"path=$vmdata/vpnkit.eth.sock,uuid=73f0acc7-1a10-4630-a977-5d9266b192e2"
-    -f bootrom,../UEFI/UEFI.fd #from Docker for Mac，有 kernel 版本限制，目前測通過的有: 4.9.x。
+    -f bootrom,/Applications/Docker.app/Contents/Resources/uefi/UEFI.fd
   )
 } || {
   args+=(
     -s 1,virtio-net
-    -f kexec,$kernel,$initrd,"console=ttyS0 printk.time=1 loglevel=5"
+    -f kexec,$kernel,$initrd,"earlyprintk=console console=ttyS0 page_poison=1 vsyscall=emulate panic=1 loglevel=6"
   )
 }
 exec sudo hyperkit2 "${args[@]}"
