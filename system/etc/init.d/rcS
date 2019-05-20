@@ -15,7 +15,7 @@ for device in $net_devices; do
   ifconfig $device | grep -q 'inet addr' \
     || {
       echo -e "\e[1;32m網路設備 $device 已偵測到，透過 DHCP 取得網址。\e[0m"
-      udhcpc -i $device -x hostname:$(hostname) -S 2>&1
+      udhcpc -i $device -x hostname:$(hostname) -S 2>/dev/null &
     }
 done
 # ip link set dev eth0 up && udhcpc -i eth0 -S 2>/dev/null &
