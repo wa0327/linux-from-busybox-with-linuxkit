@@ -1,8 +1,13 @@
 #!/bin/sh
 echo -e "\e[35m$0 on initrd executed\e[0m"
 mount -t sysfs sys /sys
+mount -t proc proc /proc
 mdev -s
-mount -t ext4 /dev/sda /new_root 
-echo -e '\e[35mswitch root to /dev/sda\e[0m'
-exec env -i "TERM=$TERM" /sbin/switch_root /new_root /init
+
+mount -t ext4 /dev/sda /new_root && {
+  echo -e '\e[35mswitch root to /dev/sda\e[0m'
+  exec env -i "TERM=$TERM" /sbin/switch_root /new_root /init
+} || {
+  exec /sbin/init
+}
 # exec /sbin/getty 38400 ttyS0 xterm-256color
