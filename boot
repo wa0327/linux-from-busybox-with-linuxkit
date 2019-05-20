@@ -13,7 +13,7 @@ args=(
   -s 0,hostbridge
   -s 31,lpc
   -s 2,ahci-hd,system.disk
-  -s 7,virtio-rnd  
+  -s 7,virtio-rnd
 )
 
 [[ $1 == 'uefi' ]] && {
