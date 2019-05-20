@@ -25,4 +25,5 @@ Steps:
 Requirements:
 - HyperKit from Git as hyperkit2
 
-Execute boot.
+Steps:
+1. Execute boot.
