@@ -4,6 +4,7 @@ ver=`cat /mac/KERNEL_VERSION`
 cd /root \
   && tar xf /mac/busybox.tar.gz \
   && cp -r /mac/initrd/* . \
+  && find . -name .gitkeep -delete
   && find . | cpio -oH newc | gzip -c  > /initrd.gz \
   && mv /initrd.gz /mac/ \
   && echo 'initrd created successfully.'
