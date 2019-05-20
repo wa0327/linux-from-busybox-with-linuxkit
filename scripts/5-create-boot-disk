@@ -2,14 +2,15 @@
 ver=`cat /mac/KERNEL_VERSION`
 
 losetup -D
-dd if=/dev/zero of=/boot.disk bs=1M count=48 1>/dev/null \
-  && parted -s /boot.disk mktable gpt \
-  && parted -s /boot.disk mkpart fat32 34s 98270s 1>/dev/null 2>&1 \
+dd if=/dev/zero of=/boot.disk bs=1M count=10 1>/dev/null \
+  && parted /boot.disk mklabel gpt \
+  && parted /boot.disk mkpart fat16 2048s 100% \
+  && parted /boot.disk set 1 esp on \
   && losetup -f /boot.disk \
   && {
     partx -d --nr 1 /dev/loop0
     partx -a --sector-size 512 /dev/loop0 &&
-      mkfs.fat -F32 /dev/loop0p1 1>/dev/null \
+      mkfs.fat -F16 /dev/loop0p1 1>/dev/null \
         && mount /dev/loop0p1 /mnt \
         && {
           cd /mnt \
