@@ -1,2 +1,3 @@
 #!/bin/busybox ash
+echo -e "\e[1;36mNow logged in on `tty`\e[0m"
 exec login -f root

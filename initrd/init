@@ -4,7 +4,7 @@ mount -t sysfs sys /sys
 mount -t proc proc /proc
 mdev -s
 
-mount -t ext4 /dev/sda /new_root && {
+mount -t ext4 /dev/sda2 /new_root && {
   echo -e '\e[35mswitch root to /dev/sda\e[0m'
   exec env -i "TERM=$TERM" /sbin/switch_root /new_root /init
 } || {

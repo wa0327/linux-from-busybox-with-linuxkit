@@ -1,0 +1,57 @@
+#!/bin/sh
+ver=`cat /mac/KERNEL_VERSION`
+
+losetup -D
+boot_succeed=false
+system_succeed=false
+dd if=/dev/zero of=/system.disk bs=512 count=28705 2>/dev/null \
+  && parted /system.disk mklabel gpt \
+  && parted /system.disk mkpart boot 2048s 20479s \
+  && parted /system.disk mkpart system 20480s 28671s \
+  && losetup -f /system.disk \
+  && {
+    partx -d --nr 1:2 /dev/loop0
+    partx -a --sector-size 512 /dev/loop0 \
+      && {
+        echo 'creating boot partition ...'
+        mkfs.fat -F16 /dev/loop0p1 \
+        && mkdir /mnt/boot \
+        && mount /dev/loop0p1 /mnt/boot \
+        && {
+          echo 'copying boot data ...'
+          cd /mnt/boot \
+            && cp -a /uefi/EFI . \
+            && cp /mac/kernel-stuff/$ver/vmlinuz . \
+            && cp /mac/initrd.gz . \
+            && cp /mac/grub.cfg EFI/BOOT/ \
+            && cd / \
+            && umount /mnt/boot \
+            && boot_succeed=true
+        }
+      } \
+      && {
+        echo 'creating system partition ...'
+        mkfs.ext4 /dev/loop0p2 1>/dev/null \
+        && mkdir /mnt/system \
+        && mount /dev/loop0p2 /mnt/system \
+        && {
+          echo 'copying system data ...'
+          cd /mnt/system \
+            && rmdir lost+found \
+            && tar xf /mac/busybox.tar.gz \
+            && cp -r /mac/system/* . \
+            && find . -name .gitkeep -delete \
+            && ($exclude_modules || cp -a /mac/kernel-stuff/$ver/modules lib/) \
+            && cd / \
+            && cd / \
+            && umount /mnt/system \
+            && system_succeed=true
+        }
+      }
+
+      losetup -d /dev/loop0 \
+        && $boot_succeed \
+        && $system_succeed \
+        && mv /system.disk /mac/ \
+        && echo 'system disk created successfully.'
+  }

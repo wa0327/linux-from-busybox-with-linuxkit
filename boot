@@ -12,14 +12,13 @@ args=(
   -l com1,stdio
   -s 0,hostbridge
   -s 31,lpc
-  -s 2,ahci-hd,system.part
+  -s 2,ahci-hd,system.disk
   -s 7,virtio-rnd  
 )
 
 [[ $1 == 'uefi' ]] && {
   args+=(
     -s 1,virtio-vpnkit,"path=$vmdata/vpnkit.eth.sock,uuid=73f0acc7-1a10-4630-a977-5d9266b192e2"
-    -s 3,ahci-hd,boot.part
     -f bootrom,../UEFI/UEFI.fd #from Docker for Mac，有 kernel 版本限制，目前測通過的有: 4.9.x。
   )
 } || {

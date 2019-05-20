@@ -6,7 +6,7 @@ mount -t tmpfs tmpfs /dev/shm
 mdev -s
 mount -a
 hostname -F /etc/hostname
-syslogd -C1024 && echo -e '\e[1;32m系統記錄已啟用，可使用 logread 讀取。\e[0m'
+syslogd -C1024 && echo -e '\e[1;32mSystem logging enabled, use logread to read it.\e[0m'
 
 ifconfig lo 127.0.0.1 up
 route add 127.0.0.1 lo
@@ -14,7 +14,7 @@ net_devices="$(awk -F: '/eth.:|tr.:/{print $1}' /proc/net/dev 2>/dev/null)"
 for device in $net_devices; do
   ifconfig $device | grep -q 'inet addr' \
     || {
-      echo -e "\e[1;32m網路設備 $device 已偵測到，透過 DHCP 取得網址。\e[0m"
+      echo -e "\e[1;32mNetwork device $device detected, DHCP broadcasting for IP.\e[0m"
       udhcpc -i $device -x hostname:$(hostname) -S 2>/dev/null &
     }
 done
