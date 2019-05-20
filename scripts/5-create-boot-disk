@@ -2,25 +2,27 @@
 ver=`cat /mac/KERNEL_VERSION`
 
 losetup -D
-dd if=/dev/zero of=/boot.disk bs=512 count=18493 1>/dev/null \
+succeed=false
+dd if=/dev/zero of=/boot.disk bs=512 count=18493 2>/dev/null \
   && parted /boot.disk mklabel gpt \
-  && parted /boot.disk mkpart fat16 2048s 18459s \
+  && parted /boot.disk mkpart boot 2048s 18459s \
   && losetup -f /boot.disk \
   && {
     partx -d --nr 1 /dev/loop0
-    partx -a --sector-size 512 /dev/loop0 &&
-      mkfs.fat -F16 /dev/loop0p1 \
-        && mount /dev/loop0p1 /mnt \
-        && {
-          cd /mnt \
-            && cp -a /uefi/EFI . \
-            && cp /mac/kernel-stuff/$ver/vmlinuz . \
-            && cp /mac/initrd.gz . \
-            && cp /mac/grub.cfg EFI/BOOT/ \
-            && cd / \
-            && umount /mnt \
-            && succeed=true
-        }
+    partx -a --sector-size 512 /dev/loop0 \
+    && mkfs.fat -F16 /dev/loop0p1 \
+      && mount /dev/loop0p1 /mnt \
+      && {
+        echo 'copying boot data ...'
+        cd /mnt \
+          && cp -a /uefi/EFI . \
+          && cp /mac/kernel-stuff/$ver/vmlinuz . \
+          && cp /mac/initrd.gz . \
+          && cp /mac/grub.cfg EFI/BOOT/ \
+          && cd / \
+          && umount /mnt \
+          && succeed=true
+      }
 
       losetup -d /dev/loop0 \
         && $succeed \

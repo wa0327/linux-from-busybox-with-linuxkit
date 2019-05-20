@@ -4,11 +4,12 @@ exclude_modules=true
 
 umount /mnt 2> /dev/null
 
-dd if=/dev/zero of=/system.part bs=512 count=7500 \
+dd if=/dev/zero of=/system.part bs=512 count=7500 2>/dev/null \
   && mkfs.ext4 /system.part 1>/dev/null \
   && mount /system.part /mnt \
   && {
     cd /mnt \
+      && rmdir lost+found \
       && tar xf /mac/busybox.tar.gz \
       && cp -r /mac/system/* . \
       && ($exclude_modules || cp -a /mac/kernel-stuff/$ver/modules lib/) \
