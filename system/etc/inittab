@@ -1,4 +1,4 @@
 ::sysinit:/etc/init.d/rcS
-tty1::respawn:/sbin/getty 115200 tty1 xterm-256color
-ttyS0::respawn:/sbin/getty -nl /sbin/autologin 115200 ttyS0 xterm-256color
 ::ctrlaltdel:/sbin/reboot
+tty1::respawn:/sbin/getty -nl /sbin/autologin 9600 tty1 xterm-256color
+ttyS0::respawn:/sbin/getty -nl /sbin/autologin 9600 ttyS0 xterm-256color

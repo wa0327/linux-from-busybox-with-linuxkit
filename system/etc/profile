@@ -1,10 +1,8 @@
+echo -e "\e[1;97mHello \e[1;35m${USER}\e[0m\e[1;98m, welcome back!\e[0m"
 alias ls='ls -p'
 alias l='ls'
 alias ll='ls -lh'
 alias la='ls -A'
 alias lla='ls -lhA'
-
 PS1='[\[\e[96m\]\h\[\e[0m\]][\[\e[97m\]$?\[\e[0m\]] \[\e[33m\]\w\[\e[0m\] \$ '
-PATH='/usr/bin:/bin:/usr/sbin:/sbin'
-
-stty columns 120 rows 40
+stty columns 80 rows 48

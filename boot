@@ -25,7 +25,7 @@ args=(
 } || {
   args+=(
     -s 1,virtio-net
-    -f kexec,$kernel,$initrd,"earlyprintk=console console=ttyS0 page_poison=1 vsyscall=emulate panic=1 loglevel=6"
+    -f kexec,$kernel,$initrd,"console=ttyS0 loglevel=6"
   )
 }
 exec sudo hyperkit2 "${args[@]}"
